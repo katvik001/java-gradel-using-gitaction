@@ -1,40 +1,20 @@
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
 
-name: Java CI with Gradle
+group 'com.example'
+version '1.0-SNAPSHOT'
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+sourceCompatibility = 1.8
 
-permissions:
-  contents: read
+repositories {
+    mavenCentral()
+}
 
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-		
-	- name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-
-    - name: Build with Gradle
-      run: ./gradlew build
-
-	- name: Build and Push Docker Image
-      uses: mr-smithers-excellent/docker-build-push@v4
-      with:
-        image: nanajanashia/demo-app
-        registry: docker.io
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.2'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
